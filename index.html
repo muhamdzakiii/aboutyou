@@ -68,7 +68,7 @@
         #gx-gl { opacity: 0; transition: opacity 1.4s; }
         #gx-2d { pointer-events: none; touch-action: none; }
         #galaxy.go #gx-2d { pointer-events: auto; cursor: grab; }
-        .gx-box { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: min(330px, 86vw); text-align: center; padding: 34px 24px 30px; border-radius: 22px; background: rgba(48,10,22,.55); border: 1px solid rgba(255,120,170,.18); backdrop-filter: blur(8px); box-shadow: 0 0 60px rgba(255,60,130,.12); transition: opacity .6s, transform .6s; }
+        .gx-box { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: min(330px, 86vw); box-sizing: border-box; text-align: center; padding: 34px 24px 30px; border-radius: 22px; background: rgba(48,10,22,.55); border: 1px solid rgba(255,120,170,.18); backdrop-filter: blur(8px); box-shadow: 0 0 60px rgba(255,60,130,.12); transition: opacity .6s, transform .6s; }
         .gx-box h1 { font: 600 33px/1.2 'Playfair Display', Georgia, serif; margin: 0 0 18px; text-shadow: 0 0 22px rgba(255,150,190,.45); }
         .gx-sub { font-size: 11px; letter-spacing: 3px; color: #f0b9ca; margin-bottom: 26px; }
         .gx-btn { border: 0; border-radius: 99px; padding: 11px 22px; font: 500 10.5px 'Poppins', sans-serif; letter-spacing: 2px; cursor: pointer; background: linear-gradient(90deg, #f7a3b7, #e8648f); color: #3a0a1c; box-shadow: 0 0 22px rgba(255,100,150,.35); }
@@ -103,7 +103,7 @@
         #pk.on .gx-box > :nth-child(4) { transition-delay: .65s; }
         #pk.on .gx-box > :nth-child(5) { transition-delay: .8s; }
         #menu .mi:active { transform: scale(.96); }
-        #pk h2 { font: 600 28px/1.25 'Playfair Display', Georgia, serif; margin: 6px 0 10px; text-shadow: 0 0 22px rgba(255,150,190,.45); }
+        #pk h2 { font: 600 23px/1.25 'Playfair Display', Georgia, serif; margin: 6px 0 10px; text-shadow: 0 0 22px rgba(255,150,190,.45); }
         #pk p { font-size: 12px; line-height: 1.6; color: #f3d3dd; margin: 0 0 22px; }
         .pk-row { display: flex; gap: 7px; justify-content: center; margin-bottom: 18px; }
         .pk-row input { width: 36px; height: 46px; padding: 0; box-sizing: border-box; text-align: center; font: 500 20px 'Poppins', sans-serif; color: #fff; caret-color: #ff6fa8; background: rgba(255,255,255,.05); border: 1px solid rgba(255,120,170,.3); border-radius: 12px; outline: none; transition: border-color .2s, box-shadow .2s; }
@@ -1222,14 +1222,6 @@ addEventListener("keydown", e => { if (e.key === "Escape" && window.gxAktif) tut
         raf = requestAnimationFrame(loop);
     })(t0);
 })();
-    setTimeout(() => alert(
-    "innerWidth=" + innerWidth +
-    "\nclientWidth=" + document.documentElement.clientWidth +
-    "\nvvScale=" + (window.visualViewport ? visualViewport.scale : "n/a") +
-    "\nvvWidth=" + (window.visualViewport ? visualViewport.width : "n/a") +
-    "\ndpr=" + devicePixelRatio +
-    "\nmeta=" + document.querySelector('meta[name=viewport]').content
-), 2500);
 </script>
 </body>
 </html>
