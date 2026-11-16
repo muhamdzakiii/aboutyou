@@ -977,8 +977,8 @@ addEventListener("keydown", e => {
   if (e.key === "-" || e.key === "_") zoomU = klipZoom(zoomU * 1.1);
 
 });
-c2.addEventListener("pointerdown", e => { dn = { x: e.clientX, y: e.clientY, mx: 0 }; c2.setPointerCapture(e.pointerId); });
-c2.addEventListener("pointermove", e => { if (!dn) return; const dx = e.clientX - dn.x, dy = e.clientY - dn.y; dn.mx += Math.abs(dx) + Math.abs(dy); vel = dx * .0016; tiltU = Math.max(-.3, Math.min(.5, tiltU + dy * .002)); dn.x = e.clientX; dn.y = e.clientY; });
+c2.addEventListener("pointerdown", e => { c2.setPointerCapture(e.pointerId); if (ptrs.size > 1) { dn = null; return; } dn = { x: e.clientX, y: e.clientY, mx: 0 }; });
+c2.addEventListener("pointermove", e => { if (!dn || ptrs.size > 1) return; const dx = e.clientX - dn.x, dy = e.clientY - dn.y; dn.mx += Math.abs(dx) + Math.abs(dy); vel = dx * .0016; tiltU = Math.max(-.3, Math.min(.5, tiltU + dy * .002)); dn.x = e.clientX; dn.y = e.clientY; });
 c2.addEventListener("pointerup", e => {
   if (dn && dn.mx < 8) {
     let ok = false;
