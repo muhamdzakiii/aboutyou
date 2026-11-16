@@ -753,7 +753,7 @@ function drawEye(t) {
     // ---------- jalankan sekali (tanpa loop) ----------
     resize();
     const t0 = performance.now();
-    const MIN_DT = innerWidth < 700 ? 29 : 0;   // ~30 fps di HP
+    const MIN_DT = 0;  // ~30 fps di HP
     let lastDraw = 0;
     function frame(now) {
         if (now - lastDraw < MIN_DT) { requestAnimationFrame(frame); return; }
