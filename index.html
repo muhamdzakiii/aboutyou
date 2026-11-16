@@ -1222,6 +1222,14 @@ addEventListener("keydown", e => { if (e.key === "Escape" && window.gxAktif) tut
         raf = requestAnimationFrame(loop);
     })(t0);
 })();
+    setTimeout(() => alert(
+    "innerWidth=" + innerWidth +
+    "\nclientWidth=" + document.documentElement.clientWidth +
+    "\nvvScale=" + (window.visualViewport ? visualViewport.scale : "n/a") +
+    "\nvvWidth=" + (window.visualViewport ? visualViewport.width : "n/a") +
+    "\ndpr=" + devicePixelRatio +
+    "\nmeta=" + document.querySelector('meta[name=viewport]').content
+), 2500);
 </script>
 </body>
 </html>
