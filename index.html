@@ -1040,7 +1040,7 @@ const PK = $("pk"), pkRow = $("pk-row"), pkMsg = $("pk-msg"), pkIn = [...pkRow.q
 let pkSalah = 0, pkTerbuka = false, pkKunci = false;
 function pkReset() { pkIn.forEach(i => { i.value = ""; i.classList.remove("f"); }); pkRow.className = "pk-row"; pkMsg.textContent = ""; pkKunci = false; }
 function pkBuka() {
-  if (pkTerbuka) { bukaGx(); return; }          // sudah benar di sesi ini, nggak perlu ulang
+  //if (pkTerbuka) { bukaGx(); return; }          // sudah benar di sesi ini, nggak perlu ulang
   window.pkAktif = true; pkSalah = 0; pkReset(); PK.classList.add("on"); setTimeout(() => { if (window.pkAktif) { pkIn[0].focus({ preventScroll: true }); window.scrollTo(0, 0); } }, 450);
 }
 function pkTutup() { window.pkAktif = false; PK.classList.remove("on"); if (document.activeElement) document.activeElement.blur(); }
