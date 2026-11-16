@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Juli 07 2025</title>
     <link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
@@ -13,7 +13,7 @@
                 url('coolvetica.otf') format('opentype');
             font-display: block;
         }
-        html { overflow: hidden; width: 100%; height: 100%; overscroll-behavior: none; background: #000; }
+        html { overflow: hidden; width: 100%; height: 100%; overscroll-behavior: none; background: #000; touch-action: manipulation; }
         body {
             background-color: black;
             color: #d4d4d4;
@@ -36,9 +36,9 @@
         #hidden-canvas {
             display: none;
         }
-        /* Style tambahan untuk kanvas animasi mata/video */
+        
         #eye-screen {
-            display: none; /* Disembunyikan sampai lirik selesai */
+            display: none; 
             width: 100vw; 
             height: 100vh; height: 100dvh;
             position: absolute;
@@ -53,7 +53,7 @@
         }
         
     
-        /* ===== menu + galaksi cinta ===== */
+        
         #start-overlay { flex-direction: column; cursor: default; }
         #btn-start { cursor: pointer; transition: .25s; }
         #btn-start:hover { color: #fff; text-shadow: 0 0 12px #ffffff80; }
@@ -84,14 +84,14 @@
         #gx-back { position: absolute; top: 16px; left: 16px; z-index: 6; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font: 15px/1 'Poppins', sans-serif; color: #f0b9ca; background: rgba(48,10,22,.45); border: 1px solid rgba(255,255,255,.14); cursor: pointer; }
         #gx-back:hover { color: #fff; }
 
-        /* ===== intro kucing "I Love You" ===== */
+        
         #cat-intro { position: fixed; inset: 0; z-index: 100; background: #000; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: opacity .9s ease; }
         #cat-intro.out { opacity: 0; pointer-events: none; }
         #cat-intro svg { width: min(92vw, 820px); height: auto; overflow: visible; }
         #cat-intro text { font-family: 'Comic Sans MS', 'Comic Neue', 'Chalkboard SE', 'Segoe Print', cursive; font-size: 116px; fill: #a8d4ec; }
 
-        /* ===== passkey menu About Naadaa ===== */
-        #pk { position: fixed; inset: 0; z-index: 40; visibility: hidden; opacity: 0; pointer-events: none; background: radial-gradient(ellipse at 20% 30%, #3b1020 0%, #12040a 55%, #050102 100%); font-family: 'Poppins', system-ui, sans-serif; color: #fff; transition: opacity .7s cubic-bezier(.4,0,.2,1), visibility 0s linear .7s; }
+        
+        #pk { position: fixed; inset: 0; z-index: 40; visibility: hidden; opacity: 0; pointer-events: none; background: radial-gradient(ellipse at 20% 30%, #3b1020 0%, #12040a 55%, #050102 100%); font-family: 'Poppins', system-ui, sans-serif; color: #fff; transition: opacity .7s cubic-bezier(.4,0,.2,1), visibility 0s linear .7s; height: 100dvh; touch-action: manipulation; }
         #pk.on { visibility: visible; opacity: 1; pointer-events: auto; transition: opacity .7s cubic-bezier(.4,0,.2,1), visibility 0s; }
         #pk .gx-box { opacity: 0; transform: translate(-50%, -46%) scale(.97); transition: opacity .5s ease, transform .5s ease; }
         #pk.on .gx-box { opacity: 1; transform: translate(-50%, -50%) scale(1); transition: opacity .8s ease .15s, transform .9s cubic-bezier(.22,.61,.36,1) .15s; }
@@ -159,7 +159,7 @@
     <div id="ascii-container"></div>
     <canvas id="hidden-canvas" width="1600" height="400"></canvas>
     
-    <!-- Kanvas baru untuk eye_2.html -->
+    
     <canvas id="eye-screen"></canvas>
 
     <script>
@@ -184,17 +184,17 @@
             { text: "While We Try\nTo Recall", at: 76.5, warna: ["#e8e8e8", "#e8e8e8", "#e8e8e8", "#e8e8e8", "#d9bf4f"] },
             { text: "How We Met", at: 79.1, warna: ["#e8e8e8", "#e8e8e8", "#6b84f0"] },
         ];
-        const EYE_START_AT = 80.1;   // detik lagu: lirik ASCII habis, masuk animasi mata
+        const EYE_START_AT = 80.1;   
 
         let index = 0;
 
         const WARNA = [
-            "#e8e8e8", "#e8e8e8", "#e8e8e8",   // putih (paling sering)
-            "#8190e6", "#8190e6",              // biru keunguan
-            "#d9bf4f", "#d9bf4f",              // emas
-            "#a4c35d"                          // hijau muda
+            "#e8e8e8", "#e8e8e8", "#e8e8e8",   
+            "#8190e6", "#8190e6",              
+            "#d9bf4f", "#d9bf4f",              
+            "#a4c35d"                          
         ];
-        function seededRand(seed) {            // acak yang stabil per teks, supaya warna tidak berkedip
+        function seededRand(seed) {            
             let h = 2166136261;
             for (const c of seed) h = Math.imul(h ^ c.charCodeAt(0), 16777619);
             return () => { h = Math.imul(h ^ (h >>> 15), 2246822507); h ^= h >>> 13; return ((h >>> 0) % 1000) / 1000; };
@@ -215,7 +215,7 @@
             const lineHeight = 115;
             const firstY = canvas.height / 2 - ((lines.length - 1) * lineHeight) / 2;
 
-            // gambar per kata + catat rentang x tiap kata beserta warnanya
+            
             const spaceW = ctx.measureText(" ").width;
             let wordNo = 0;
             const lineWords = lines.map((line, li) => {
@@ -235,7 +235,7 @@
                 });
             });
 
-                // nama kecil di antara "About You" dan "Juli 2025"
+                
                 const isIntro = textStr.startsWith("About You");
                 const namaY = canvas.height / 2 + 140;
                 const NAMA_WARNA = "#d9bf4f";
@@ -252,7 +252,7 @@
                     ctx.strokeText(nama, cx, namaY);
                     const lebar = ctx.measureText(nama).width;
                     
-                // garis bawah (agak melengkung)
+                
                 ctx.lineWidth = 6;
                 ctx.lineCap = "round";
                 ctx.beginPath();
@@ -307,7 +307,7 @@
             fitAscii();
         }
 
-        // skala teks ASCII menyesuaikan layar (HP / desktop)
+        
         function fitAscii() {
             const w = container.offsetWidth, h = container.offsetHeight;
             if (!w || !h) return;
@@ -319,13 +319,13 @@
 
         let lirikTampil = -1, eyeSudahJalan = false, tMulaiJam = 0;
 
-        // waktu acuan = posisi lagu. Kalau lagu gagal dimuat, pakai jam cadangan supaya animasi tetap jalan
+        
         function waktuLagu() {
             if (lagu.error) return LAGU_MULAI + (performance.now() - tMulaiJam) / 1000;
             return lagu.currentTime;
         }
 
-        // lirik ditampilkan berdasarkan posisi lagu (bukan timer berantai), jadi nggak bisa meleset
+        
         function playSequence() {
             if (eyeSudahJalan) return;
             const t = waktuLagu();
@@ -339,7 +339,7 @@
                 return;
             }
 
-            let k = -1;                                              // lirik terakhir yang waktunya sudah lewat
+            let k = -1;                                             
             for (let i = 0; i < sequence.length; i++) if (t >= sequence[i].at) k = i;
             if (k !== lirikTampil) {
                 lirikTampil = k;
@@ -349,7 +349,7 @@
         }
 
 
-        const LAGU_MULAI = 34;    // lagu mulai dari detik ke berapa (kalau pakai lagu full & mau mulai dari bridge, mis. 44)
+        const LAGU_MULAI = 34;    
         const lagu = document.getElementById("lagu");
         const overlay = document.getElementById("start-overlay");
         let sudahMulai = false;
@@ -359,16 +359,16 @@
             sudahMulai = true;
             overlay.style.display = "none";
             tMulaiJam = performance.now();
-            playSequence();                                 // lirik ngikutin posisi lagu
+            playSequence();                                 
         }
 
-        // coba langsung putar; kalau diblokir browser -> tampilkan "klik untuk mulai"
+        
         lagu.currentTime = LAGU_MULAI;
         lagu.volume = 1;
         lagu.addEventListener("loadedmetadata", () => {
         if (lagu.currentTime < LAGU_MULAI) lagu.currentTime = LAGU_MULAI;
         }, { once: true });
-        overlay.style.display = "flex";            // layar menu selalu tampil dulu
+        overlay.style.display = "flex";           
         const mulaiManual = () => {
             if (sudahMulai || window.gxAktif || window.pkAktif) return;
             lagu.currentTime = LAGU_MULAI;
@@ -378,7 +378,7 @@
         document.getElementById("btn-start").addEventListener("click", mulaiManual);
         window.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") mulaiManual(); });
 
-        // setelah animasi mata selesai: lagu dipelanin 3 detik lalu berhenti
+        
         window.addEventListener("eye-animation-end", () => {
             const fade = setInterval(() => {
                 lagu.volume = Math.max(0, lagu.volume - 0.05);
@@ -1041,7 +1041,7 @@ let pkSalah = 0, pkTerbuka = false, pkKunci = false;
 function pkReset() { pkIn.forEach(i => { i.value = ""; i.classList.remove("f"); }); pkRow.className = "pk-row"; pkMsg.textContent = ""; pkKunci = false; }
 function pkBuka() {
   if (pkTerbuka) { bukaGx(); return; }          // sudah benar di sesi ini, nggak perlu ulang
-  window.pkAktif = true; pkSalah = 0; pkReset(); PK.classList.add("on"); setTimeout(() => { if (window.pkAktif) pkIn[0].focus(); }, 450);
+  window.pkAktif = true; pkSalah = 0; pkReset(); PK.classList.add("on"); setTimeout(() => { if (window.pkAktif) { pkIn[0].focus({ preventScroll: true }); window.scrollTo(0, 0); } }, 450);
 }
 function pkTutup() { window.pkAktif = false; PK.classList.remove("on"); if (document.activeElement) document.activeElement.blur(); }
 function pkCek() {
