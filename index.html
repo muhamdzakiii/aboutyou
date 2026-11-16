@@ -448,7 +448,8 @@ function resize() {
     screen.width  = innerWidth * dpr;
     screen.height = innerHeight * dpr;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    FONT_PX = innerWidth < 700 ? Math.max(3.6, Math.min(8, innerWidth / 100)) : 8; ctx.font = `bold ${FONT_PX}px Consolas, "Courier New", monospace`;
+    FONT_PX = innerWidth < 700 ? Math.max(3.6, Math.min(8, innerWidth / 100)) : 8;   // HP: huruf lebih halus supaya teks puisi kebaca
+    ctx.font = `bold ${FONT_PX}px Consolas, "Courier New", monospace`;
     ctx.textBaseline = "top";
     cw = ctx.measureText("M").width;
     ch = cw * ASPECT;
@@ -459,7 +460,9 @@ function resize() {
 
     // sinkron: cari waktu saat pupil (hitam) sudah menutupi seluruh frame video
     const hh = rows * ASPECT / 2 / unit, hw = cols / 2 / unit;
-    EYE_S = Math.min(0.6, 0.93 * hw / (EYE_E + W)); ZT = clamp(Math.min(hw * 0.94 / W, hh * 0.95 / 0.55), EYE_S, 1.8); if (hw < 1.3) ZT = clamp(hw * 0.96 / BW, EYE_S, 1.8);   // zoom saat baca: satu mata penuh layar
+    EYE_S = Math.min(0.6, 0.93 * hw / (EYE_E + W));   // layar sempit (HP): kecilkan awal supaya kedua mata muat
+    ZT = clamp(Math.min(hw * 0.94 / W, hh * 0.95 / 0.55), EYE_S, 1.8);   // zoom saat baca: satu mata penuh layar
+    if (hw < 1.3) ZT = clamp(hw * 0.96 / BW, EYE_S, 1.8);              // HP portrait: zoom sampai kotak puisi selebar layar
     const zmax = Math.max(14, 1.15 * Math.hypot(hw, hh) / R_PUPIL);
     const pryMax = Math.min(hh, hw / VASPECT) * 0.82, prxMax = pryMax * VASPECT;
     const zcover = Math.hypot(prxMax, pryMax) * 1.1 / R_PUPIL;
@@ -948,11 +951,11 @@ function loop(now) {
     x2.fillStyle = "#ffc4e0"; x2.shadowColor = "#ff2d8a"; x2.shadowBlur = 14;
     floaters(t, la, hg);
     x2.setTransform(dpr, 0, 0, dpr, 0, 0); x2.font = "38px sans-serif"; x2.fillStyle = "#ff5d9e"; x2.shadowBlur = 20;
-    const refD = 11 * (portrait ? 1.45 : 1);
+    const refD = 11 * (portrait ? 1.45 : 1);          // jarak kamera normal; ukuran hati dibuat relatif terhadap ini
     GX_KARTU.forEach((c, i) => {
       const r = 1.7 + i * .6, th = i * 1.3 + spin + t * .3 / (.4 + r * .5) + .6, y = .6 + .2 * Math.sin(t * 1.6 + i), p = P(r * Math.cos(th), y, r * Math.sin(th));
       if (p[2] < 2.6) return;
-      const sc = Math.max(.35, Math.min(1.15, refD / p[2]));
+      const sc = Math.max(.35, Math.min(1.15, refD / p[2]));   // makin jauh (zoom out) makin kecil
       x2.font = Math.round(38 * sc) + "px sans-serif"; x2.shadowBlur = 20 * sc;
       x2.globalAlpha = la; x2.fillText("\u2665", p[0], p[1]); hits.push([p[0], p[1], i, 30 * sc + 6]);
     });
