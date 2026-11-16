@@ -444,7 +444,7 @@ function rgb(r, g, b) {
 
 /* ---------- grid ---------- */
 function resize() {
-    const dpr = window.devicePixelRatio || 1;
+    const dpr = Math.min(window.devicePixelRatio || 1, innerWidth < 700 ? 1.5 : 2);   // HP: dpr 3 itu 9x piksel, dibatasi biar ringan
     screen.width  = innerWidth * dpr;
     screen.height = innerHeight * dpr;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -571,6 +571,12 @@ function textAt(t) {
 }
 const tcov = (px, py) => (px < 0 || py < 0 || px >= TXT_W || py >= TXT_H) ? 0 : TA[((py | 0) * TXT_W + (px | 0)) * 4 + 3];
 
+const buckets = new Map();
+function put(style, ch, px, py) {
+    let a = buckets.get(style);
+    if (!a) { a = []; buckets.set(style, a); }
+    a.push(ch, px, py);
+}
 function drawEye(t) {
     const fadeOut = 1 - smooth(LOOP - 0.7, LOOP, t);
     const reveal  = smooth(0.6, 2.4, t) * (rows + 6);          // huruf turun dari atas
@@ -724,24 +730,34 @@ function drawEye(t) {
 
             I *= rev;
             if (I < 0.04) continue;
-            if (forceCh) { const fc = fcol || [255, 255, 255]; ctx.fillStyle = rgb(fc[0] * I, fc[1] * I, fc[2] * I); ctx.fillText(forceCh, x * cw, y * ch); continue; }
+            if (forceCh) { const fc = fcol || [255, 255, 255]; put(rgb(fc[0] * I, fc[1] * I, fc[2] * I), forceCh, x * cw, y * ch); continue; }
 
             const ramp = face ? FRAMP : RAMP;
             const jit  = face ? 1 : 0.82 + 0.3 * hash(x + frameSeed, y);
             const k = Math.floor(clamp(I * jit) * (ramp.length - 1));
             if (k === 0) continue;
             const m = face ? 0.35 + 0.65 * I : 0.3 + 0.7 * I;
-            ctx.fillStyle = rgb(r * m, g * m, b * m);
-            ctx.fillText(ramp[k], x * cw, y * ch);
+            put(rgb(r * m, g * m, b * m), ramp[k], x * cw, y * ch);
         }
     }
 
+    // gambar per warna: huruf nggak saling numpuk, jadi urutan nggak ngaruh ke tampilan
+    for (const [style, a] of buckets) {
+        if (!a.length) continue;
+        ctx.fillStyle = style;
+        for (let i = 0; i < a.length; i += 3) ctx.fillText(a[i], a[i + 1], a[i + 2]);
+        a.length = 0;
+    }
 }
 
     // ---------- jalankan sekali (tanpa loop) ----------
     resize();
     const t0 = performance.now();
+    const MIN_DT = innerWidth < 700 ? 29 : 0;   // ~30 fps di HP
+    let lastDraw = 0;
     function frame(now) {
+        if (now - lastDraw < MIN_DT) { requestAnimationFrame(frame); return; }
+        lastDraw = now;
         const t = Math.min((now - t0) / 1000, LOOP);
         ctx.fillStyle = "black";
         ctx.fillRect(0, 0, innerWidth, innerHeight);
