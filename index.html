@@ -393,10 +393,10 @@
             const screen = document.getElementById("eye-screen");
             const ctx = screen.getContext("2d"); // Variabel ctx aman dari bentrok karena berada di dalam fungsi (local scope)
 
-const FONT_PX = 8;      // ukuran karakter (kecil = lebih detail)
+let   FONT_PX = 8;      // ukuran karakter (kecil = lebih detail)
 const ASPECT  = 1.8;    // tinggi sel / lebar sel
 let   LOOP    = 12;     // detik = VSTART + durasi video + 1 (dihitung ulang di resize)
-const EYE_S = 0.6;   // skala awal: dua mata muat di layar (1 = satu mata penuh)
+let   EYE_S = 0.6;   // skala awal: dua mata muat di layar (1 = satu mata penuh)
 const EYE_E = 1.3;   // jarak tiap mata dari tengah (satuan lebar-mata)
 
 /* ---------- puisi di mata kanan (diketik satu-satu, per kalimat) ---------- */
@@ -448,7 +448,7 @@ function resize() {
     screen.width  = innerWidth * dpr;
     screen.height = innerHeight * dpr;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    ctx.font = `bold ${FONT_PX}px Consolas, "Courier New", monospace`;
+    FONT_PX = innerWidth < 700 ? Math.max(3.6, Math.min(8, innerWidth / 100)) : 8; ctx.font = `bold ${FONT_PX}px Consolas, "Courier New", monospace`;
     ctx.textBaseline = "top";
     cw = ctx.measureText("M").width;
     ch = cw * ASPECT;
@@ -459,7 +459,7 @@ function resize() {
 
     // sinkron: cari waktu saat pupil (hitam) sudah menutupi seluruh frame video
     const hh = rows * ASPECT / 2 / unit, hw = cols / 2 / unit;
-    ZT = clamp(Math.min(hw * 0.94 / W, hh * 0.95 / 0.55), EYE_S, 1.8);   // zoom saat baca: satu mata penuh layar
+    EYE_S = Math.min(0.6, 0.93 * hw / (EYE_E + W)); ZT = clamp(Math.min(hw * 0.94 / W, hh * 0.95 / 0.55), EYE_S, 1.8); if (hw < 1.3) ZT = clamp(hw * 0.96 / BW, EYE_S, 1.8);   // zoom saat baca: satu mata penuh layar
     const zmax = Math.max(14, 1.15 * Math.hypot(hw, hh) / R_PUPIL);
     const pryMax = Math.min(hh, hw / VASPECT) * 0.82, prxMax = pryMax * VASPECT;
     const zcover = Math.hypot(prxMax, pryMax) * 1.1 / R_PUPIL;
