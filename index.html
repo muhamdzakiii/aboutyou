@@ -57,10 +57,11 @@
         #start-overlay { flex-direction: column; cursor: default; }
         #btn-start { cursor: pointer; transition: .25s; }
         #btn-start:hover { color: #fff; text-shadow: 0 0 12px #ffffff80; }
-        #menu { margin-top: 30px; display: flex; flex-direction: column; gap: 14px; align-items: center; font-size: 14px; letter-spacing: 3px; color: #8a8a8a; }
+        #menu { margin-top: 30px; display: flex; flex-direction: column; gap: 6px; align-items: center; font-size: 14px; letter-spacing: 3px; color: #8a8a8a; }
         #menu:before { content: ""; width: 60px; height: 1px; background: #333; margin-bottom: 8px; }
         #menu .mi { cursor: pointer; transition: .25s; }
         #menu .mi:hover { color: #ff7ab8; text-shadow: 0 0 14px #ff2d8a99; }
+        #menu #btn-scrapbook:hover { color: #b48cff; text-shadow: 0 0 14px #8a4dff99; }
         #galaxy { position: fixed; inset: 0; z-index: 30; display: none; background: #000; font-family: 'Poppins', system-ui, sans-serif; color: #fff; }
         #galaxy { transition: background 1.2s; }
         #galaxy.intro { background: radial-gradient(ellipse at 20% 30%, #3b1020 0%, #12040a 55%, #050102 100%); }
@@ -125,6 +126,52 @@
         #pk.on .gx-box { animation: pkGlow 4.5s ease-in-out 1.2s infinite; }
         @keyframes pkGlow { 0%, 100% { box-shadow: 0 0 50px rgba(255,60,130,.10); border-color: rgba(255,120,170,.18); } 50% { box-shadow: 0 0 90px rgba(255,60,130,.26); border-color: rgba(255,120,170,.34); } }
         @media (prefers-reduced-motion: reduce) { #pk-sparks { display: none; } #pk.on .gx-box { animation: none; } }
+    
+    #scrapbook-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    display: none;
+    background: #807d9c;
+    }
+    #scrapbook-overlay.on {
+    display: block;
+    }
+    #sb-frame {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    display: block;
+    }
+    #sb-back {
+    position: absolute;
+    top: 10px;
+    left: 12px;
+    z-index: 60;
+    width: 34px;
+    height: 34px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font: 15px/1 'Poppins', sans-serif;
+    color: #fff;
+    background: rgba(38, 42, 64, 0.55);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    cursor: pointer;
+    transition: .2s;
+    }
+    #sb-back:hover {
+    background: rgba(38, 42, 64, 0.85);
+    }
+
+    @view-transition { navigation: auto; }
+
+    @keyframes fadeOut { to { opacity: 0; transform: scale(.97); filter: blur(4px); } }
+
+    ::view-transition-old(root) {
+    animation: .5s cubic-bezier(.4, 0, .2, 1) both fadeOut;
+}
     </style>
 </head>
 <body>
@@ -173,7 +220,7 @@
                     </g>
         </svg>
     </div>
-    <div id="start-overlay"><div id="btn-start">&#9654; klik untuk mulai</div><div id="menu"><div class="mi" id="btn-galaxy">&#9829; About Naadaa</div></div></div>
+    <div id="start-overlay"><div id="btn-start">&#9654; klik untuk mulai</div><div id="menu"><div class="mi" id="btn-galaxy">&#9829; About Naadaa</div><div class="mi" id="btn-scrapbook">&#10047; Scrapbook</div></div></div>
     <div id="galaxy" class="intro">
         <canvas id="gx-gl"></canvas><canvas id="gx-2d"></canvas>
         <div id="gx-back" title="Kembali">&#10005;</div>
@@ -185,8 +232,12 @@
     <div id="ascii-container"></div>
     <canvas id="hidden-canvas" width="1600" height="400"></canvas>
     
-    
     <canvas id="eye-screen"></canvas>
+
+    <div id="scrapbook-overlay">
+        <div id="sb-back" title="Kembali">&#10005;</div>
+        <iframe id="sb-frame" title="Journal Scrapbook"></iframe>
+    </div>
 
     <script>
         document.fonts.load("120px Coolvetica");
@@ -196,7 +247,7 @@
 
         const chars = ["@", "#", "S", "%", "?", "*", "+", ";", ":", ",", ".", " "];
         const charsLength = chars.length;
-
+        
         const sequence = [
             { text: "About You\nNur Nada Zahro", at: 34.8, warna: ["#e8e8e8", "#e8e8e8", "#e8e8e8", "#e8e8e8", "#e8e8e8"] },
             { text: "I", at: 44.7, warna: ["#e8e8e8"] },
@@ -396,7 +447,7 @@
         }, { once: true });
         overlay.style.display = "flex";           
         const mulaiManual = () => {
-            if (sudahMulai || window.gxAktif || window.pkAktif) return;
+            if (sudahMulai || window.gxAktif || window.pkAktif || window.sbAktif) return;
             lagu.currentTime = LAGU_MULAI;
             lagu.play().catch(e => console.warn("Lagu gagal diputar:", e));
             mulaiSemua();
@@ -1239,6 +1290,21 @@ addEventListener("keydown", e => { if (e.key === "Escape" && window.gxAktif) tut
         if (t >= DUR) { tutup(); return; }
         raf = requestAnimationFrame(loop);
     })(t0);
+
+    const sbOverlay = document.getElementById("scrapbook-overlay");
+    const sbFrame = document.getElementById("sb-frame");
+
+    document.getElementById("btn-scrapbook").addEventListener("click", () => {
+        window.sbAktif = true;
+        sbFrame.src = "scrapbook.html";
+        sbOverlay.classList.add("on");
+    });
+
+    document.getElementById("sb-back").addEventListener("click", () => {
+        sbOverlay.classList.remove("on");
+        sbFrame.src = "";
+        window.sbAktif = false;
+});
 })();
 </script>
 </body>

@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Journal – scrapbook</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gochi+Hand&display=swap">
+<style>
+:root{--cw:min(100vw,430px);--pw:min(calc(var(--cw)*.82),50vh);--ph:calc(var(--pw)/1.17);--cvw:min(calc(var(--cw)*.634),34vh);--cvh:calc(var(--cvw)*1.49);--b:calc(var(--cw)*.107);box-sizing:border-box;color-scheme:dark}
+*,*::before,*::after{box-sizing:inherit}
+html,body{height:100%;margin:0}
+body{background:#807d9c;color:#fff;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;overflow:hidden;user-select:none;-webkit-user-select:none;transition:background .6s ease}
+body.open{background:#3c4263}
+.app{position:relative;width:var(--cw);height:100%;margin:0 auto}
+.top{position:absolute;top:5%;left:4%;right:4%;display:flex;justify-content:space-between}
+.top div{display:flex;gap:calc(var(--b)*.26)}
+.ic{width:var(--b);height:var(--b);border-radius:50%;border:1.5px solid rgba(255,255,255,.55);background:rgba(255,255,255,.1);display:grid;place-items:center;cursor:pointer;padding:0}
+.ic.on{border-color:#fff;background:transparent}
+.ic svg{width:44%;height:44%;stroke:#fff;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+h1{position:absolute;top:calc(24% - 12px);left:0;right:0;margin:0;text-align:center;font-size:calc(var(--cw)*.048);font-weight:700;letter-spacing:.2px}
+.cnt{position:absolute;top:calc(21.9% - 8px);left:0;right:0;text-align:center;font-size:calc(var(--cw)*.034);font-weight:600;opacity:.85;display:flex;justify-content:center;align-items:center;gap:6px}
+.cnt svg{width:1.3em;height:1.3em;stroke:#fff;fill:none;stroke-width:1.8;stroke-linecap:round}
+.dot{position:absolute;right:9.6%;top:31.2%;width:calc(var(--b)*.6);height:calc(var(--b)*.6);transform:translate(50%,-50%);border-radius:50%;background:#888898;box-shadow:0 0 0 calc(var(--b)*.16) rgba(255,255,255,.12),0 0 12px rgba(255,255,255,.18);z-index:9;pointer-events:none}
+.scene{position:absolute;inset:0;perspective:1700px;perspective-origin:50% 52%;touch-action:pan-y;cursor:pointer}
+.stack,.cover,.cs,.osh{position:absolute;left:50%;top:52.3%}
+.cover,.cs{width:var(--cvw);height:var(--cvh);margin:calc(var(--cvh)/-2) 0 0 calc(var(--cvw)/-2)}
+.stack,.osh{width:var(--pw);height:var(--ph);margin:calc(var(--ph)/-2) 0 0 calc(var(--pw)/-2)}
+.stack{visibility:hidden;transform-style:preserve-3d;transform-origin:left center;will-change:transform}
+.osh{background:#2b3254;opacity:0;filter:blur(10px);transform:translate(8%,16%);transition:opacity .4s}
+body.open .osh{opacity:.5}
+.cs{background:#5b5e8f;border-radius:6px 14px 14px 6px;filter:blur(12px);transform:translate(11%,9%) scale(.97);opacity:.8}
+.gb{position:absolute;right:calc(50% + var(--cvw)/2 + var(--cvw)*.11);bottom:calc(100% - 52.3% - var(--cvh)/2*1 + 0px);width:calc(var(--cvw)*.9);height:calc(var(--cvh)*.85);background:#4fba70;border-radius:8px 14px 14px 8px;box-shadow:inset -4px 0 0 rgba(0,0,0,.08)}
+.cover{background:#f6f5f8;border-radius:5px 14px 14px 5px;transform-origin:left center;overflow:hidden;font-family:"Gochi Hand","Segoe Print","Comic Sans MS",cursive;color:#1a1a1a;font-size:calc(var(--cvw)/8)}
+.cover::before{content:"";position:absolute;left:0;top:0;bottom:0;width:11.5%;background:linear-gradient(90deg,#f0aa22,#f9ba34 40%,#f9ba34 85%,#e9a51f)}
+.cover .t{position:absolute;left:19%;top:3%;line-height:1.02;text-align:left}
+.cover .t span{display:block}
+.cover .t .a{font-size:1em;transform:rotate(-3deg)}.cover .t .b{font-size:1.35em;margin-left:.9em;transform:rotate(3deg)}.cover .t .c{font-size:1.4em;margin-left:1.3em}
+.cover .t .c i{font-style:normal;color:#e8303a;filter:blur(.8px)}
+.cover svg{position:absolute;left:12.5%;bottom:0;width:84%}
+.cover .g{position:absolute;right:6%;top:3.5%;width:12%;aspect-ratio:1;border-radius:50%;background:rgba(120,120,128,.75)}
+.sheet{position:absolute;inset:0;transform-origin:left center;transform-style:preserve-3d;will-change:transform}
+.fc,.bk{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:7px;overflow:hidden}
+.fc{box-shadow:0 6px 12px rgba(0,0,0,.25)}
+.bk{transform:rotateY(180deg);background:var(--e,#f6f0b6)}
+.sh{position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,rgba(40,40,60,0),rgba(40,40,60,.42));opacity:var(--sh,0)}
+.dm{position:absolute;inset:0;pointer-events:none;background:#1f2347;opacity:var(--dm,0)}
+.back{background:#bba68d}
+.bar{position:absolute;top:84.8%;left:0;right:0;display:flex;justify-content:center;gap:calc(var(--b)*.26);transform:translateY(-50%);transition:opacity .3s}
+.bar button{width:var(--b);height:var(--b);border-radius:50%;border:0;background:#fff;display:grid;place-items:center;cursor:pointer;padding:0}
+.bar svg{width:46%;height:46%;stroke:#262a40;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.home{position:absolute;bottom:1.1%;left:32.5%;width:35%;height:5px;border-radius:3px;background:#f4f4f6}
+body:not(.open) .bar{opacity:0;pointer-events:none}
+.toast{position:fixed;bottom:12%;left:50%;transform:translateX(-50%);background:#fff;color:#2b3150;font-size:13px;padding:8px 14px;border-radius:20px;opacity:0;transition:opacity .25s;pointer-events:none;z-index:20}
+.toast.on{opacity:1}
+:focus-visible{outline:2px solid #ffd84d;outline-offset:2px}
+.topc{position:absolute;top:5%;left:4%;right:4%;display:flex;justify-content:space-between;align-items:flex-start}
+.topc div{display:flex;gap:calc(var(--b)*.26)}
+.ic.w{background:#fff;border-color:#fff}.ic.w svg{stroke:#262a40}
+body.open .topc,body:not(.open) .top{opacity:0;visibility:hidden;pointer-events:none}
+.top,.topc{z-index:10;transition:opacity .35s ease,visibility .35s}
+.pg{width:100%;height:100%;position:relative;background:#f3f3f6;font-family:"Gochi Hand","Segoe Print","Comic Sans MS",cursive;color:#111;font-size:calc(var(--pw)/20);display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:5%}
+.pg::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,transparent calc(50% - .9em),rgba(0,0,0,.035) calc(50% - .1em),rgba(255,255,255,.12) calc(50% + .15em),transparent calc(50% + .9em))}
+.ttl{font-size:1.4em;font-weight:700;position:absolute;top:8%;left:0;right:0;letter-spacing:.07em}
+.y{background:#f9f1b4}
+.ltr{align-items:flex-start;text-align:left;font-size:calc(var(--pw)/20.5);line-height:1.38;justify-content:center;padding:4% 5%}
+.ltr p{margin:0 0 .55em}
+.hr{border:1.5px solid #d6303a;border-radius:50%;padding:0 .25em}
+.kr{background:#cdb590 radial-gradient(circle at 30% 20%,#dcc9a8,transparent 60%)}
+.gr{background:#fbfbfe linear-gradient(#d3d9ea 1px,transparent 1px) 0 0/1.4em 1.4em,linear-gradient(90deg,#d3d9ea 1px,transparent 1px) 0 0/1.4em 1.4em}
+.big{font-size:2.1em;line-height:1.05}
+.pk{background:#fbe3ea}.pc{background:#fbe6dc}
+.hl{background:linear-gradient(transparent 20%,#a9c6f5 20%,#a9c6f5 85%,transparent 85%);padding:0 .3em}
+.spread{position:absolute;inset:0;border-radius:7px;box-shadow:0 6px 12px rgba(0,0,0,.25);transform:translateZ(1px)}
+.half{position:absolute;top:0;bottom:0;width:50%;overflow:hidden;visibility:hidden;transform:translateZ(2px)}
+.half.l{left:0;border-radius:7px 0 0 7px}.half.r{left:50%;border-radius:0 7px 7px 0}
+.pb{position:absolute;top:0;bottom:0;width:200%;left:0}
+.half.r .pb,.ff .pb{left:-100%}
+.flap{position:absolute;top:0;bottom:0;left:50%;width:50%;transform-origin:0 50%;transform-style:preserve-3d;visibility:hidden;will-change:transform}
+.ff,.fb{position:absolute;inset:0;overflow:hidden;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.ff{border-radius:0 7px 7px 0}
+.fb{transform:rotateY(180deg);border-radius:7px 0 0 7px}
+.ff .sh{background:linear-gradient(90deg,transparent 35%,rgba(40,40,60,.34))}
+.fb .sh{background:linear-gradient(270deg,transparent 35%,rgba(40,40,60,.34))}
+@view-transition { navigation: auto; }
+
+@keyframes fadeIn { from { opacity: 0; } }
+::view-transition-new(root) {
+  animation: .7s cubic-bezier(.2, .8, .2, 1) both fadeIn;
+}
+
+/* bukunya naik pelan pas halaman muncul */
+@keyframes rise { from { opacity: 0; transform: translateY(28px); } }
+.scene { animation: rise .9s .2s cubic-bezier(.2, .8, .2, 1) both; }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="topc">
+    <div><button class="ic w" aria-label="Perpustakaan"><svg viewBox="0 0 24 24"><path d="M6 4v16M10 4v16M14 5l4 15"/></svg></button></div>
+  </div>
+  <div class="top">
+    <div><button class="ic on" aria-label="Tutup buku" data-a="close"><svg viewBox="0 0 24 24"><path d="M12 6c-2-1.5-5-2-8-1.5v13c3-.5 6 0 8 1.5 2-1.5 5-2 8-1.5v-13c-3-.5-6 0-8 1.5zM12 6v13"/></svg></button><button class="ic" aria-label="Ke awal" data-a="first"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="6" height="6" rx="1"/><rect x="14" y="4" width="6" height="6" rx="1"/><rect x="4" y="14" width="6" height="6" rx="1"/><rect x="14" y="14" width="6" height="6" rx="1"/></svg></button></div>
+  </div>
+  <h1>Buatt Kamuuu >_<</h1>
+  <div class="cnt"><span id="n"></span></div>
+  <div class="scene" id="scene">
+    <div class="gb" id="gb"></div>
+    <div class="cs" id="cs"></div>
+    <div class="osh"></div>
+    <div class="stack" id="stack"></div>
+    <div class="cover" id="cover" role="button" tabindex="0" aria-label="Buka buku">
+      <div class="t"><span class="a">FOR</span><span class="b">YOU</span><span class="c">BB <i>♥</i></span></div>
+      <svg viewBox="0 0 100 78" aria-hidden="true"><g fill="#fff" stroke="#111" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="38" cy="30" r="22"/><path d="M14 78c4-14 12-18 24-18M30 78c10-4 22 0 26 0M46 52l20 26"/></g><path d="M29 26q3-3 6 0M43 26q3-3 6 0M32 39q6 5 12 0" fill="none" stroke="#111" stroke-width="1.3" stroke-linecap="round"/><circle cx="26" cy="33" r="2.6" fill="#f08a8a" opacity=".7"/><circle cx="50" cy="33" r="2.6" fill="#f08a8a" opacity=".7"/><path d="M60 60l8-12 14 14-6 16z" fill="#fff" stroke="#111" stroke-width="1.2"/><circle cx="70" cy="42" r="5" fill="#e0262f"/><circle cx="78" cy="46" r="5" fill="#3a7bd5"/><circle cx="68" cy="50" r="4.5" fill="#f2a31b"/><circle cx="76" cy="38" r="4" fill="#9b3fbf"/><circle cx="82" cy="40" r="3.5" fill="#e0262f"/></svg>
+      <div class="g"></div>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+(function(){
+var scene=document.getElementById('scene'),stack=document.getElementById('stack'),cover=document.getElementById('cover'),cnt=document.getElementById('n'),toast=document.getElementById('toast'),gb=document.getElementById('gb'),cs=document.getElementById('cs');
+var P=[
+['#f6f0b6','<div class="pg y"><div class="ttl">ada pesan buat kamu</div><svg width="38%" viewBox="0 0 120 80" style="margin-top:6%"><rect x="4" y="4" width="112" height="72" rx="14" fill="#fff" stroke="#111" stroke-width="3"/><path d="M12 14l48 36 48-36" fill="none" stroke="#111" stroke-width="3"/><path d="M60 50l-5-6a4 4 0 017-1 4 4 0 017 1z" fill="#e87a9a"/></svg><svg width="42%" viewBox="0 0 150 30" style="position:absolute;bottom:9%;left:9%"><path d="M4 15h136M124 4l17 11-17 11" fill="none" stroke="#111" stroke-width="3" stroke-linecap="round"/></svg></div>'],
+['#f3f3f6','<div class="pg ltr"><p>ini dari aku ♡ buat kamu!</p><p>kamu kalau <span class="hr">capek</span> boleh kok jadiin aku<br>tempat bersandar.</p><p>kamu harus tau rasa sayang aku ke kamu<br>itu melebihi seisi semesta 🌍</p><p>kalau ada orang jahat, jangan didengerin yaa<br>kalau ada orang jahat diemin aja</p><p>inget yaa, aku selalu sayang kamu &lt;3</p></div>'],
+['#cdb590','<div class="pg kr"><svg width="30%" viewBox="0 0 100 92"><path d="M50 88C8 58 6 24 28 16c12-4 20 2 22 10 2-8 10-14 22-10 22 8 20 42-22 72z" fill="#d6252f" stroke="#111" stroke-width="3.5"/><path d="M26 28c4-6 12-6 16 0" fill="none" stroke="#fff" stroke-width="3" opacity=".6"/></svg></div>'],
+['#f3f3f6','<div class="pg"><svg width="58%" viewBox="0 0 170 60"><g fill="#fff" stroke="#111" stroke-width="2.2"><circle cx="30" cy="30" r="22"/><circle cx="140" cy="30" r="22"/></g><path d="M22 28q3-3 6 0M34 28q3-3 6 0M25 38q5 4 10 0M132 28q3-3 6 0M144 28q3-3 6 0M135 38q5 4 10 0M72 30h26M85 17v26" fill="none" stroke="#111" stroke-width="2.2" stroke-linecap="round"/></svg><div class="big" style="margin-top:.5em">You &amp; Me = <span style="color:#e0527a">♥</span></div></div>'],
+['#f3f3f6','<div class="pg gr"><div class="big" style="font-size:1.7em">kamu <span class="hl">lebih dari cukup</span><br>dan aku selalu bilang cukup</div><div style="font-size:2em;margin-top:.3em">☀️ ☁️ 🌷</div></div>'],
+['#fbe3ea','<div class="pg pk"><div class="big" style="color:#8aa0d8;transform:rotate(-5deg)">kamu itu</div><div class="big" style="font-size:2.8em;color:#b887e0;text-shadow:0 0 6px #fff">selalu hebat</div><div class="big" style="font-size:3em;color:#f06292">GANTENG</div></div>'],
+['#cdb590','<div class="pg kr"><svg width="80%" viewBox="0 0 190 70" style="position:absolute;top:8%"><path d="M8 60C50 6 120 80 182 18" fill="none" stroke="#6b4a2a" stroke-width="2" stroke-dasharray="3 5"/></svg><div style="font-size:4.6em;line-height:1;margin-top:.3em">🌍</div><div style="font-size:1.3em;color:#4a3320">aku &amp; kamu, satu orbit</div></div>'],
+['#fbe6dc','<div class="pg pc ltr"><p>kamu itu hal paling baik yang pernah datang ke hidup aku.<br>kamu bikin hari yang berat jadi ringan, dan bikin hari biasa jadi seru.</p><p>makasih udah sabar, makasih udah tinggal.<br>aku bangga banget sama kamu.</p><p style="font-size:1.3em;color:#c0305a">you’re the winner ♡</p></div>'],
+['#f3f3f6','<div class="pg"><div style="font-size:4.6em;line-height:1">🌙</div><div class="big" style="margin-top:.1em">i love you!</div><div style="font-size:1.3em;color:#d6a22a">and i miss you so so much!</div></div>'],
+['#f3f3f6','<div class="pg gr"><div class="big" style="font-size:2.8em;color:#555">Semangat<br>Ya <span style="color:#f06292;font-size:1.2em">KAMU</span></div></div>'],
+['#f3f3f6','<div class="pg"><svg width="30%" viewBox="0 0 100 100"><rect x="14" y="14" width="72" height="62" rx="24" fill="#fff" stroke="#111" stroke-width="3"/><circle cx="38" cy="40" r="3.2" fill="#111"/><circle cx="62" cy="40" r="3.2" fill="#111"/><path d="M42 54q8 6 16 0" fill="none" stroke="#111" stroke-width="3" stroke-linecap="round"/><rect x="24" y="72" width="52" height="26" fill="#fff" stroke="#111" stroke-width="3"/></svg><div style="font-size:1.2em;margin-top:-1.2em;position:relative">you’re amazing<br>and i love you</div><div style="position:absolute;left:10%;top:16%;color:#e0527a;font-size:1.8em">♥</div><div style="position:absolute;right:10%;bottom:14%;color:#e0527a;font-size:1.8em">♥</div></div>'],
+['#f3f3f6','<div class="pg"><svg width="46%" viewBox="0 0 100 92"><defs><clipPath id="fh"><path d="M50 88C8 58 6 24 28 16c12-4 20 2 22 10 2-8 10-14 22-10 22 8 20 42-22 72z"/></clipPath></defs><g clip-path="url(#fh)"><rect width="100" height="100" fill="#e24a57"/><g fill="none" stroke="#a2182c" stroke-width="1.3"><ellipse cx="50" cy="50" rx="40" ry="34"/><ellipse cx="50" cy="50" rx="32" ry="27"/><ellipse cx="50" cy="50" rx="24" ry="20"/><ellipse cx="50" cy="50" rx="16" ry="13"/><ellipse cx="50" cy="50" rx="8" ry="6"/></g></g></svg></div>'],
+['#f3f3f6','<div class="pg"><div style="font-size:1.5em;color:#3a6fb0">your my</div><div style="font-size:4.6em;line-height:1">💙🌍</div><div class="big">World</div></div>'],
+['#f3f3f6','<div class="pg ltr" style="justify-content:center;font-size:calc(var(--pw)/15)"><p>me + you = ♡</p><p>me − you = ;(</p></div>'],
+['#f3f3f6','<div class="pg"><div style="font-size:4.4em;line-height:1">🌸🌷</div><div class="big" style="color:#d6527a;margin-top:.2em">love you :)</div></div>']
+];
+var RM=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches,A=.5,PI=Math.PI,sheets=[],isOpen=false,emo=['🌸','🦋','⭐','🍓','☁️','🎀','🌈','🍒'];
+/* Dua "pegas" fisika: OS = buka/tutup buku (0..1), PS = posisi halaman (float, 0..n-1). Semua transform dihitung dari dua angka ini tiap frame. */
+var OS={x:0,v:0,t:0,w:11,z:.8},PS={x:0,v:0,t:0,w:16,z:1,drag:false},raf=0,last=0,acc=0,drag=null;
+var back=document.createElement('div');back.className='sheet back';back.style.borderRadius='7px';
+function clamp(v,a,b){return v<a?a:v>b?b:v}
+function sgn(x,p){return x<0?-Math.pow(-x,p):Math.pow(x,p)}
+function kick(o,w,z){o.w=w*(RM?2.5:1);o.z=z}
+function step(o,h){o.v+=(-o.w*o.w*(o.x-o.t)-2*o.z*o.w*o.v)*h;o.x+=o.v*h}
+function rest(o,e){return Math.abs(o.x-o.t)<e&&Math.abs(o.v)<.005}
+function active(){return PS.drag||!rest(OS,8e-4)||!rest(PS,5e-4)}
+function wake(){if(!raf){last=performance.now();acc=0;raf=requestAnimationFrame(tick)}}
+function tick(now){
+  raf=0;acc+=Math.min(.05,(now-last)/1000);last=now;var H=1/240;
+  while(acc>=H){if(!PS.drag)step(PS,H);step(OS,H);acc-=H}
+  if(rest(OS,8e-4)){OS.x=OS.t;OS.v=0}
+  if(!PS.drag&&rest(PS,5e-4)){PS.x=PS.t;PS.v=0}
+  render();if(active())raf=requestAnimationFrame(tick);
+}
+var Ls=[],Rs=[],Fs=[],shown=[],spread;
+function show(l){shown.forEach(function(e){if(l.indexOf(e)<0)e.style.visibility='hidden'});l.forEach(function(e){if(e)e.style.visibility='inherit'});shown=l.filter(Boolean)}
+var FAN=0;
+function paint(el,t,isBack){
+  var x,r=0,sx,sy,z,vis=true,k,kc;
+  if(t<=0){k=-t;kc=k>2?2:k;x=18*kc;sx=sy=1-.04*kc;z=-2*k-4-(isBack?1:0);vis=k<3.6;r=FAN*kc*9}
+  else if(t<1){x=0;r=-180;sx=Math.max(.0005,.15*t*t*(3-2*t));sy=.96;z=-6}   /* halaman yang baru dibalik: strip kiri tumbuh pelan */
+  else{k=t;kc=k>2?2:k;x=-(kc-1)*2.4;r=-180;sx=.15;sy=.96;z=-2*k-4;vis=k<3.6}
+  var tr='translate3d('+x.toFixed(3)+'%,0,'+z.toFixed(2)+'px) rotateY('+r+'deg) scale('+sx.toFixed(4)+','+sy.toFixed(4)+')',c=tr+vis;
+  if(el._c===c)return;el._c=c;el.style.transform=tr;el.style.visibility=vis?'':'hidden';
+}
+function render(){
+  var s=OS.x,g=clamp(1-s/.12,0,1),tz=(310*sgn(Math.sin(PI*s),1.2)).toFixed(2);
+  gb.style.opacity=g;cs.style.opacity=.8*g;
+  if(s<A){
+    cover.style.visibility='';stack.style.visibility='hidden';
+    cover.style.transform='translateZ('+tz+'px) rotateY('+(89*sgn(s/A,1.3)).toFixed(3)+'deg)';
+    if(!isOpen&&(PS.x||PS.t||PS.v)){PS.x=PS.t=PS.v=0}
+    return;
+  }
+  cover.style.visibility='hidden';stack.style.visibility='visible';
+  FAN=clamp(1-(s-A)/(1-A),0,1);
+  stack.style.transform='translateZ('+tz+'px) rotateY('+(87*sgn(1-(s-A)/(1-A),1.35)).toFixed(3)+'deg)';
+  var pos=PS.x,n=sheets.length,i=clamp(Math.floor(pos),0,n-1),last=i>=n-1,f=last?0:clamp(pos-i,-.06,1);
+  for(var j=0;j<n;j++)paint(sheets[j],pos-j);
+  paint(back,pos-n,true);
+  /* spread: kiri = halaman i, kanan = halaman i+1, dan separuh kanan halaman i berputar di garis tekukan tengah */
+  var ri=Math.min(i+1,n-1),Fi=last?null:Fs[i],sn=Math.sin(PI*Math.max(f,0));
+  show([Ls[i],Rs[ri],Fi]);
+  Ls[i].style.setProperty('--dm',(.10*sn).toFixed(3));Rs[ri].style.setProperty('--dm',last?0:(.08*sn).toFixed(3));
+  if(Fi){Fi.style.transform='translateZ('+(3+10*sn).toFixed(2)+'px) rotateY('+(-180*f).toFixed(3)+'deg)';Fi.style.setProperty('--sh',sn.toFixed(3))}
+}
+function pb(h){return '<div class="pb">'+h+'</div>'}
+function build(){
+  stack.innerHTML='';shown=[];sheets=[];Ls=[];Rs=[];Fs=[];
+  spread=document.createElement('div');spread.className='spread';stack.appendChild(spread);
+  P.forEach(function(p){var d=document.createElement('div');d.className='sheet';d.style.setProperty('--e',p[0]);
+    d.innerHTML='<div class="fc">'+p[1]+'</div><div class="bk"></div>';stack.appendChild(d);sheets.push(d)});
+  stack.appendChild(back);back._c='';
+  P.forEach(function(p,i){
+    var l=document.createElement('div');l.className='half l';l.innerHTML=pb(p[1])+'<div class="dm"></div>';
+    var r=document.createElement('div');r.className='half r';r.innerHTML=pb(p[1])+'<div class="dm"></div>';
+    stack.appendChild(l);stack.appendChild(r);Ls.push(l);Rs.push(r);
+    if(i<P.length-1){var f=document.createElement('div');f.className='flap';
+      f.innerHTML='<div class="ff">'+pb(p[1])+'<div class="sh"></div></div><div class="fb">'+pb(P[i+1][1])+'<div class="sh"></div></div>';
+      stack.appendChild(f);Fs.push(f)}
+  });
+}
+function canFlip(){return isOpen&&OS.t===1&&OS.x>.85}
+function goTo(t,w){PS.t=t;kick(PS,w||16,1);wake()}
+function next(){if(!canFlip())return;var t=Math.round(PS.t)+1;if(t<=sheets.length-1)goTo(t)}
+function prev(){if(!canFlip())return;var t=Math.round(PS.t)-1;if(t>=0)goTo(t)}
+function jump(t){if(canFlip()&&Math.round(PS.t)!==t)goTo(t,12.5)}
+
+/* musik latar */
+var bgm=new Audio('musik-scrapbook.mp3');bgm.preload='auto';bgm.volume=0;
+var VOL=.6,fadeT=0;
+function fadeTo(v,ms,done){
+  cancelAnimationFrame(fadeT);var a=bgm.volume,t0=performance.now();
+  (function f(n){var p=Math.min(1,(n-t0)/ms);bgm.volume=a+(v-a)*p*(2-p);
+    if(p<1)fadeT=requestAnimationFrame(f);else if(done)done()})(t0);
+}
+function musicOn(){bgm.play().then(function(){fadeTo(VOL,1600)}).catch(function(){})}
+function musicOff(){fadeTo(0,700,function(){bgm.pause()})}
+bgm.addEventListener('ended',function(){bgm.currentTime=0;if(isOpen)musicOn()});
+document.addEventListener('visibilitychange',function(){if(document.hidden)bgm.pause();else if(isOpen)musicOn()});
+
+function open(){if(isOpen)return;isOpen=true;document.body.classList.add('open');OS.t=1;kick(OS,13,.72);musicOn();wake()}
+function closeBook(){if(!isOpen)return;isOpen=false;document.body.classList.remove('open');PS.drag=false;drag=null;OS.t=0;kick(OS,10,.85);musicOff();wake()}
+cover.addEventListener('click',open);
+cover.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' ')open()});
+function Wd(){return stack.offsetWidth*.8}
+scene.addEventListener('pointerdown',function(e){
+  if(!canFlip())return;
+  drag={x0:e.clientX,p0:PS.x,moved:false,dx:0,h:[]};
+});
+window.addEventListener('pointermove',function(e){
+  if(!drag)return;var dx=e.clientX-drag.x0;
+  if(!drag.moved){if(Math.abs(dx)<6)return;drag.moved=true;drag.x0=e.clientX;drag.p0=PS.x;PS.drag=true;PS.v=0;dx=0}
+  drag.dx=dx;var raw=drag.p0-dx/Wd(),hi=sheets.length-1;
+  if(raw<0)raw*=.3;else if(raw>hi)raw=hi+(raw-hi)*.3;   /* efek karet di ujung buku */
+  PS.x=raw;var now=performance.now();drag.h.push([raw,now]);
+  while(drag.h.length>2&&now-drag.h[0][1]>100)drag.h.shift();
+  wake();
+});
+function release(e){
+  if(!drag)return;var d=drag;drag=null;
+  if(!d.moved){if(!canFlip()||e.type==='pointercancel')return;var b=scene.getBoundingClientRect();(e.clientX>b.left+b.width/2?next:prev)();return}
+  var h=d.h,v=0;
+  if(h.length>1){var a=h[0],z=h[h.length-1],dt=(z[1]-a[1])/1000;if(dt>.001)v=(z[0]-a[0])/dt}
+  v=clamp(v,-14,14);PS.drag=false;
+  var b0=Math.round(d.p0),f=PS.x+v*.12+(d.dx<0?.25:-.25);   /* lepas jari: lanjut sesuai arah & kecepatan geser */
+  PS.t=clamp(clamp(Math.round(f),b0-1,b0+1),0,sheets.length-1);PS.v=v;kick(PS,16,.92);wake();
+}
+window.addEventListener('pointerup',release);window.addEventListener('pointercancel',release);
+document.addEventListener('keydown',function(e){if(e.key==='ArrowRight')next();if(e.key==='ArrowLeft')prev()});
+function say(t){toast.textContent=t;toast.classList.add('on');setTimeout(function(){toast.classList.remove('on')},1600)}
+document.querySelector('.top').addEventListener('click',function(e){var b=e.target.closest('[data-a]');if(!b)return;if(b.dataset.a==='close')closeBook();else jump(b.dataset.a==='last'?sheets.length-1:0)});
+build();
+})();
+</script>
+</body>
+</html>
