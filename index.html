@@ -87,7 +87,8 @@
         
         #cat-intro { position: fixed; inset: 0; z-index: 100; background: #000; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: opacity .9s ease; }
         #cat-intro.out { opacity: 0; pointer-events: none; }
-        #cat-intro svg { width: min(92vw, 820px); height: auto; overflow: visible; }
+        #cat-intro svg { width: min(92vw, 656px); height: auto; overflow: visible; }
+        @media (max-width: 700px) { #cat-intro svg { width: 96vw; } }
         #cat-intro text { font-family: 'Comic Sans MS', 'Comic Neue', 'Chalkboard SE', 'Segoe Print', cursive; font-size: 116px; fill: #a8d4ec; }
 
         
@@ -128,7 +129,7 @@
 </head>
 <body>
     <div id="cat-intro">
-        <svg viewBox="60 0 1250 560" xmlns="http://www.w3.org/2000/svg" aria-label="I Love You">
+        <svg viewBox="245 170 1000 370" xmlns="http://www.w3.org/2000/svg" aria-label="I Love You">
             <g id="ci-root" opacity="0">
                 <text id="ci-text" x="725" y="488">Hallowww</text>
                     <g id="ci-cat" fill="#fff">
