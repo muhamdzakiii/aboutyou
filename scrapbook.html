@@ -8,7 +8,7 @@
 <style>
 :root{--cw:min(100vw,430px);--pw:min(calc(var(--cw)*.82),50vh);--ph:calc(var(--pw)/1.17);--cvw:min(calc(var(--cw)*.634),34vh);--cvh:calc(var(--cvw)*1.49);--b:calc(var(--cw)*.107);box-sizing:border-box;color-scheme:dark}
 *,*::before,*::after{box-sizing:inherit}
-html,body{height:100%;margin:0}
+html,body{height:100%;margin:0;overscroll-behavior:none}
 body{background:#807d9c;color:#fff;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;overflow:hidden;user-select:none;-webkit-user-select:none;transition:background .6s ease}
 body.open{background:#3c4263}
 .app{position:relative;width:var(--cw);height:100%;margin:0 auto}
@@ -21,7 +21,7 @@ h1{position:absolute;top:calc(24% - 12px);left:0;right:0;margin:0;text-align:cen
 .cnt{position:absolute;top:calc(21.9% - 8px);left:0;right:0;text-align:center;font-size:calc(var(--cw)*.034);font-weight:600;opacity:.85;display:flex;justify-content:center;align-items:center;gap:6px}
 .cnt svg{width:1.3em;height:1.3em;stroke:#fff;fill:none;stroke-width:1.8;stroke-linecap:round}
 .dot{position:absolute;right:9.6%;top:31.2%;width:calc(var(--b)*.6);height:calc(var(--b)*.6);transform:translate(50%,-50%);border-radius:50%;background:#888898;box-shadow:0 0 0 calc(var(--b)*.16) rgba(255,255,255,.12),0 0 12px rgba(255,255,255,.18);z-index:9;pointer-events:none}
-.scene{position:absolute;inset:0;perspective:1700px;perspective-origin:50% 52%;touch-action:pan-y;cursor:pointer}
+.scene{position:absolute;inset:0;perspective:1700px;perspective-origin:50% 52%;touch-action:none;cursor:pointer}
 .stack,.cover,.cs,.osh{position:absolute;left:50%;top:52.3%}
 .cover,.cs{width:var(--cvw);height:var(--cvh);margin:calc(var(--cvh)/-2) 0 0 calc(var(--cvw)/-2)}
 .stack,.osh{width:var(--pw);height:var(--ph);margin:calc(var(--ph)/-2) 0 0 calc(var(--pw)/-2)}
@@ -227,11 +227,13 @@ cover.addEventListener('click',open);
 cover.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' ')open()});
 function Wd(){return stack.offsetWidth*.8}
 scene.addEventListener('pointerdown',function(e){
+  if(drag){PS.drag=false;drag=null}
   if(!canFlip())return;
-  drag={x0:e.clientX,p0:PS.x,moved:false,dx:0,h:[]};
+  drag={id:e.pointerId,x0:e.clientX,p0:PS.x,moved:false,dx:0,h:[]};
+  try{scene.setPointerCapture(e.pointerId)}catch(_){}
 });
 window.addEventListener('pointermove',function(e){
-  if(!drag)return;var dx=e.clientX-drag.x0;
+  if(!drag||e.pointerId!==drag.id)return;var dx=e.clientX-drag.x0;
   if(!drag.moved){if(Math.abs(dx)<6)return;drag.moved=true;drag.x0=e.clientX;drag.p0=PS.x;PS.drag=true;PS.v=0;dx=0}
   drag.dx=dx;var raw=drag.p0-dx/Wd(),hi=sheets.length-1;
   if(raw<0)raw*=.3;else if(raw>hi)raw=hi+(raw-hi)*.3;   /* efek karet di ujung buku */
@@ -240,8 +242,10 @@ window.addEventListener('pointermove',function(e){
   wake();
 });
 function release(e){
-  if(!drag)return;var d=drag;drag=null;
-  if(!d.moved){if(!canFlip()||e.type==='pointercancel')return;var b=scene.getBoundingClientRect();(e.clientX>b.left+b.width/2?next:prev)();return}
+  if(!drag)return;
+  if(e.pointerId!=null&&e.pointerId!==drag.id)return;
+  var d=drag;drag=null;PS.drag=false;
+  if(!d.moved){if(!canFlip()||e.type!=='pointerup')return;var b=scene.getBoundingClientRect();(e.clientX>b.left+b.width/2?next:prev)();return}
   var h=d.h,v=0;
   if(h.length>1){var a=h[0],z=h[h.length-1],dt=(z[1]-a[1])/1000;if(dt>.001)v=(z[0]-a[0])/dt}
   v=clamp(v,-14,14);PS.drag=false;
@@ -249,6 +253,7 @@ function release(e){
   PS.t=clamp(clamp(Math.round(f),b0-1,b0+1),0,sheets.length-1);PS.v=v;kick(PS,16,.92);wake();
 }
 window.addEventListener('pointerup',release);window.addEventListener('pointercancel',release);
+scene.addEventListener('lostpointercapture',release);window.addEventListener('blur',release);
 document.addEventListener('keydown',function(e){if(e.key==='ArrowRight')next();if(e.key==='ArrowLeft')prev()});
 function say(t){toast.textContent=t;toast.classList.add('on');setTimeout(function(){toast.classList.remove('on')},1600)}
 document.querySelector('.top').addEventListener('click',function(e){var b=e.target.closest('[data-a]');if(!b)return;if(b.dataset.a==='close')closeBook();else jump(b.dataset.a==='last'?sheets.length-1:0)});

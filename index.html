@@ -145,8 +145,8 @@
     }
     #sb-back {
     position: absolute;
-    top: 10px;
-    left: 12px;
+    top: calc(5% + (min(100vw, 430px) * .107 - 34px) / 2);
+    right: max(12px, env(safe-area-inset-right));
     z-index: 60;
     width: 34px;
     height: 34px;
