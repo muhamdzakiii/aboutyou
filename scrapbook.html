@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gochi+Hand&display=swap">
 <style>
 :root{--cw:min(100vw,430px);--pw:min(calc(var(--cw)*.82),50vh);--ph:calc(var(--pw)/1.17);--cvw:min(calc(var(--cw)*.634),34vh);--cvh:calc(var(--cvw)*1.49);--b:calc(var(--cw)*.107);box-sizing:border-box;color-scheme:dark}
-*,*::before,*::after{box-sizing:inherit}
+*,*::before,*::after{box-sizing:inherit;-webkit-tap-highlight-color:transparent}
 html,body{height:100%;margin:0;overscroll-behavior:none}
 body{background:#807d9c;color:#fff;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;overflow:hidden;user-select:none;-webkit-user-select:none;transition:background .6s ease}
 body.open{background:#3c4263}
@@ -211,7 +211,7 @@ function render(){
   cover.style.visibility='hidden';stack.style.visibility='visible';
   FAN=clamp(1-(s-A)/(1-A),0,1);
   stack.style.transform='translateZ('+tz+'px) rotateY('+(87*sgn(1-(s-A)/(1-A),1.35)).toFixed(3)+'deg)';
-  var pos=PS.x,n=sheets.length,i=clamp(Math.floor(pos),0,n-1),last=i>=n-1,f=last?0:clamp(pos-i,-.06,1);
+  var pos=PS.x,n=sheets.length,i=clamp(Math.floor(pos),0,n-1),last=i>=n-1,f=last?0:clamp(pos-i,0,1)
   for(var j=0;j<n;j++)paint(sheets[j],pos-j);
   paint(back,pos-n,true);
   /* spread: kiri = halaman i, kanan = halaman i+1, dan separuh kanan halaman i berputar di garis tekukan tengah */
@@ -225,7 +225,7 @@ function build(){
   stack.innerHTML='';shown=[];sheets=[];Ls=[];Rs=[];Fs=[];
   spread=document.createElement('div');spread.className='spread';stack.appendChild(spread);
   P.forEach(function(p){var d=document.createElement('div');d.className='sheet';d.style.setProperty('--e',p[0]);
-    d.innerHTML='<div class="fc">'+p[1]+'</div><div class="bk"></div>';stack.appendChild(d);sheets.push(d)});
+    d.innerHTML='<div class="fc" style="background:'+p[0]+'"></div><div class="bk"></div>';stack.appendChild(d);sheets.push(d)});
   stack.appendChild(back);back._c='';
   P.forEach(function(p,i){
     var l=document.createElement('div');l.className='half l';l.innerHTML=pb(p[1])+'<div class="dm"></div>';
